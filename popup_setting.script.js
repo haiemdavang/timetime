@@ -48,6 +48,12 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Toggle History
+        const savedHistory = localStorage.getItem('showHistory');
+        if (savedHistory !== null && toggleHistory && historyContainer) {
+            toggleHistory.checked = (savedHistory === 'true');
+            historyContainer.style.display = toggleHistory.checked ? 'block' : 'none';
+        }
+
         if (toggleHistory && historyContainer) {
             toggleHistory.addEventListener('change', (e) => {
                 if (e.target.checked) {
@@ -55,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else {
                     historyContainer.style.display = 'none';
                 }
+                localStorage.setItem('showHistory', e.target.checked);
             });
         }
 
@@ -80,6 +87,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
 
                     if (selectedVideo) {
+                        localStorage.setItem('themeType', 'video');
+                        localStorage.setItem('themeValue', selectedVideo);
                         document.body.style.backgroundImage = 'none';
                         document.body.style.backgroundColor = '#000';
                         if (bgVideo) {
@@ -88,6 +97,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             bgVideo.play();
                         }
                     } else if (selectedBg) {
+                        localStorage.setItem('themeType', 'bg');
+                        localStorage.setItem('themeValue', selectedBg);
                         document.body.style.backgroundColor = selectedBg;
                         document.body.style.backgroundImage = 'none'; // Clear image
                         if (bgVideo) {
@@ -108,6 +119,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
             });
+
+            // Restore saved theme on load
+            const savedThemeType = localStorage.getItem('themeType');
+            const savedThemeValue = localStorage.getItem('themeValue');
+            if (savedThemeType && savedThemeValue && bgDots) {
+                const targetDot = Array.from(bgDots).find(dot => {
+                    if (savedThemeType === 'video') return dot.getAttribute('data-video') === savedThemeValue;
+                    return dot.getAttribute('data-bg') === savedThemeValue;
+                });
+                if (targetDot) {
+                    targetDot.click();
+                }
+            }
         }
 
         // Handle Custom Uploads
