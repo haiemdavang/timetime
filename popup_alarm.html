@@ -1,0 +1,22 @@
+<div class="side-panel" id="side-panel">
+    <button class="close-panel" id="close-settings">×</button>
+    <h2>Alarm Settings</h2>
+    
+    <div class="input-group">
+        <label>Set Time (24h format)</label>
+        <div class="time-input-container">
+            <input type="number" id="alarm-h" placeholder="HH" min="0" max="23" value="08">
+            <span>:</span>
+            <input type="number" id="alarm-m" placeholder="MM" min="0" max="59" value="00">
+            <span>:</span>
+            <input type="number" id="alarm-s" placeholder="SS" min="0" max="59" value="00">
+        </div>
+    </div>
+
+    <div class="input-group">
+        <label for="alarm-msg">Reminder Message</label>
+        <input type="text" id="alarm-msg" placeholder="What's the plan?">
+    </div>
+
+    <button class="set-alarm-btn" id="set-alarm">Save Alarm</button>
+</div>

@@ -1,0 +1,255 @@
+@import url('https://fonts.cdnfonts.com/css/ds-digital');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+
+:root {
+    --bg-color: #000000;
+    --text-color: #ffffff;
+    --font-family: 'DS-Digital', sans-serif;
+    --digit-height: 200px;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    font-family: var(--font-family);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    user-select: none;
+    /* Chặn bôi đen văn bản */
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.main-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.countdown-container {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+    z-index: 2;
+    transition: all 0.5s ease;
+    padding: 30px 50px;
+    border-radius: 30px;
+    border: 1px solid transparent;
+}
+
+.countdown-container.glass-mode {
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+}
+
+.time-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.label {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    opacity: 0.5;
+    font-style: normal;
+}
+
+.digits {
+    display: flex;
+    gap: 10px;
+    height: var(--digit-height);
+    overflow: hidden;
+}
+
+.digit-container {
+    position: relative;
+    width: 120px;
+    height: var(--digit-height);
+    background: rgba(10, 10, 10, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.05);
+}
+
+.digit-strip {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.digit {
+    height: var(--digit-height);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 180px;
+    font-style: italic;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.6),
+        0 0 40px rgba(255, 255, 255, 0.2);
+}
+
+.separator {
+    font-size: 120px;
+    margin-top: -20px;
+    font-style: italic;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.3;
+    }
+}
+
+@media (max-width: 600px) {
+    :root {
+        --digit-height: 80px;
+    }
+
+    .digit-container {
+        width: 50px;
+    }
+
+    .digit {
+        font-size: 60px;
+    }
+}
+
+/* Alarm Notice (Professional Toast Version) */
+.alarm-notice {
+    position: fixed;
+    top: 90px;
+    left: 0;
+    width: 100%;
+    height: auto;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+    /* Chỉ cho tương tác khi active */
+}
+
+.alarm-notice.active {
+    pointer-events: all;
+}
+
+.notice-content {
+    background: rgba(255, 255, 255, 0.08);
+    backdrop-filter: blur(20px) saturate(160%);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 15px 30px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    color: white;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 10px 30px rgba(0, 0, 0, 0.4);
+    font-family: 'Poppins', sans-serif;
+
+    /* Animation khởi đầu: nằm ngoài phía trên */
+    transform: translateY(-80px);
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.alarm-notice.active .notice-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.notice-main {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.alarm-icon-small svg {
+    width: 24px;
+    height: 24px;
+    fill: white;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.4));
+    animation: pulse-small 1s infinite;
+}
+
+@keyframes pulse-small {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.15);
+    }
+}
+
+.notice-content h2 {
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    margin: 0;
+    white-space: nowrap;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6),
+        0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* Close button (Hidden by default, shows on hover) */
+.close-notice {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    background: white;
+    color: black;
+    border: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    font-size: 14px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.2s ease;
+}
+
+.notice-content:hover .close-notice {
+    opacity: 1;
+}
+
+.close-notice:hover {
+    transform: scale(1.1);
+}

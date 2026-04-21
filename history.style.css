@@ -1,0 +1,123 @@
+/* History Alarms System */
+.history-container {
+    position: absolute;
+    top: calc(50% + 200px); /* Nhích xuống thêm để tạo khoảng cách với đồng hồ */
+    width: 400px;
+    height: 200px;
+    overflow-y: auto;
+    display: flex;
+    justify-content: center;
+}
+
+.history-container::-webkit-scrollbar {
+    width: 0px;
+}
+
+.history-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.history-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    padding: 8px 0;
+    background: transparent;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    transition: all 0.4s ease;
+    position: relative;
+}
+
+/* Hiện lại dấu chấm trạng thái */
+.status-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #ffffff;
+    display: block;
+}
+
+/* 1. Alarm đã reo (Past) - Làm mờ nhẹ */
+.history-item.past {
+    opacity: 0.5;
+    filter: blur(0.5px);
+    transform: scale(0.98);
+}
+
+.history-item.past .status-dot {
+    background: #00ff88; /* Màu xanh lá cho báo thức đã hoàn thành */
+    box-shadow: 0 0 8px rgba(0, 255, 136, 0.6);
+    opacity: 0.8;
+}
+
+/* 2. Alarm sắp tới GẦN NHẤT (Highlight) - Sáng nhất */
+.history-item.upcoming:first-of-type {
+    opacity: 1 !important;
+    filter: none !important;
+    transform: scale(1.05) !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.history-item.upcoming:first-of-type .status-dot {
+    background: #00d2ff;
+    box-shadow: 0 0 10px #00d2ff;
+}
+
+/* 3. Alarm sắp tới tiếp theo - Làm mờ vừa phải */
+.history-item.upcoming + .history-item.upcoming {
+    opacity: 0.25;
+    filter: blur(1px);
+    transform: scale(0.95);
+}
+
+.history-time {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.history-msg {
+    font-size: 0.85rem;
+    opacity: 0.5;
+    margin: 0 !important;
+}
+
+.delete-history {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.history-item:hover .delete-history {
+    opacity: 0.3;
+}
+
+.history-item:hover {
+    opacity: 1;
+}
+
+.history-item:hover .delete-history {
+    opacity: 0.6;
+}
+
+.delete-history:hover {
+    opacity: 1 !important;
+    color: #ff4141;
+}
