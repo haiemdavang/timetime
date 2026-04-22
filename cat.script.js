@@ -90,6 +90,9 @@ class Cat {
         this.timer          = 0;
         this.lastTime       = 0;
 
+        this.idleTime      = 0;
+        this.idleThreshold = 20000; // 20 giây không làm gì sẽ nói chuyện
+
         this.init();
     }
 
@@ -106,8 +109,42 @@ class Cat {
         this.container.appendChild(this.bubble);
 
         this.applyZone();
+        this.initIdleDetection();
         requestAnimationFrame(this.animate.bind(this));
         this.changeAction();
+    }
+
+    /* ─── Idle Detection ────────────────────────────────── */
+    initIdleDetection() {
+        const resetIdle = () => {
+            this.idleTime = 0;
+        };
+
+        const events = ['mousemove', 'mousedown', 'touchstart', 'click', 'keydown', 'wheel'];
+        events.forEach(evt => {
+            window.addEventListener(evt, resetIdle, { passive: true });
+        });
+    }
+
+    showIdleMessage() {
+        // Chọn ngẫu nhiên một cảm xúc để thể hiện khi Sen lười
+        const moods = ['lazy', 'philosophical', 'sarcastic', 'random', 'happy'];
+        const mood = moods[Math.floor(Math.random() * moods.length)];
+        const msgs = CAT_MESSAGES[mood];
+        const text = msgs[Math.floor(Math.random() * msgs.length)];
+
+        this.bubble.textContent = text;
+        this.bubble.classList.add('active');
+
+        // Nếu đang ngủ thì cựa quậy tí
+        if (this.currentAction === 'lie') {
+            this.currentFrame = 0; 
+        }
+
+        if (this.messageTimeout) clearTimeout(this.messageTimeout);
+        this.messageTimeout = setTimeout(() => {
+            this.bubble.classList.remove('active');
+        }, 4000);
     }
 
     /* ─── Zone helpers ──────────────────────────────────── */
@@ -233,6 +270,15 @@ class Cat {
             const bounds = this.getZoneBounds();
             if (this.posX > bounds.maxX && this.direction === 1) this.direction = -1;
             else if (this.posX < bounds.minX && this.direction === -1) this.direction = 1;
+        }
+
+        // Idle logic
+        this.idleTime += deltaTime;
+        if (this.idleTime >= this.idleThreshold) {
+            this.showIdleMessage();
+            this.idleTime = 0; 
+            // Sau khi nói một câu, chờ lâu hơn một chút cho câu tiếp theo (vd: 30-60s)
+            this.idleThreshold = 30000 + Math.random() * 30000;
         }
 
         this.draw();
