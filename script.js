@@ -147,11 +147,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let translateY = 0;
 
     if (countdownContainer) {
+        let lastDragDist = 0;
+
         countdownContainer.addEventListener('mousedown', (e) => {
             if (!countdownContainer.classList.contains('glass-mode')) return;
             isDragging = true;
             startX = e.clientX - translateX;
             startY = e.clientY - translateY;
+            lastDragDist = 0;
             
             countdownContainer.style.transition = 'none';
             countdownContainer.style.cursor = 'grabbing';
@@ -163,12 +166,20 @@ document.addEventListener('DOMContentLoaded', () => {
             translateX = e.clientX - startX;
             translateY = e.clientY - startY;
             countdownContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
+            
+            // Calculate current distance from 0,0
+            lastDragDist = Math.sqrt(translateX * translateX + translateY * translateY);
         });
 
         window.addEventListener('mouseup', () => {
             if (!isDragging) return;
             isDragging = false;
             
+            // Cat reacts to the maximum drag distance achieved
+            if (window.myCat) {
+                window.myCat.reactToDrag(lastDragDist);
+            }
+
             countdownContainer.style.transition = 'transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)';
             countdownContainer.style.cursor = 'grab';
             

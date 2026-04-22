@@ -47,12 +47,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // Toggle History
-        const savedHistory = localStorage.getItem('showHistory');
-        if (savedHistory !== null && toggleHistory && historyContainer) {
-            toggleHistory.checked = (savedHistory === 'true');
-            historyContainer.style.display = toggleHistory.checked ? 'block' : 'none';
+        // Toggle Cat Visibility
+        const toggleCat = document.getElementById('toggle-cat');
+        const catContainer = document.getElementById('cat-container');
+        const savedCat = localStorage.getItem('showCat');
+        if (savedCat !== null && toggleCat && catContainer) {
+            toggleCat.checked = (savedCat === 'true');
+            catContainer.style.display = toggleCat.checked ? 'flex' : 'none';
         }
+        if (toggleCat && catContainer) {
+            toggleCat.addEventListener('change', (e) => {
+                catContainer.style.display = e.target.checked ? 'flex' : 'none';
+                localStorage.setItem('showCat', e.target.checked);
+            });
+        }
+
 
         if (toggleHistory && historyContainer) {
             toggleHistory.addEventListener('change', (e) => {

@@ -253,3 +253,63 @@ body {
 .close-notice:hover {
     transform: scale(1.1);
 }
+
+/* Cat Sprite Styles */
+#cat-container {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    width: 96px;
+    height: 96px;
+    z-index: 5;
+    pointer-events: all;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.cat-bubble {
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(255, 255, 255, 0.9);
+    color: black;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-family: 'Poppins', sans-serif;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 10;
+}
+
+.cat-bubble.active {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.cat-bubble::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: rgba(255, 255, 255, 0.9);
+}
+
+.cat-sprite {
+    width: 32px;
+    height: 32px;
+    background-image: url('public/kitty.png');
+    background-repeat: no-repeat;
+    background-size: 256px 256px; /* 8x8 grid of 32px */
+    transform: scale(3);
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+}
