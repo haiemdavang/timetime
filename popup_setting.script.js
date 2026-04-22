@@ -117,6 +117,9 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                     
+                    // Cập nhật vị trí mèo dựa theo theme
+                    if (window.myCat) window.myCat.updatePositionMode();
+                    
                     // Thêm/bớt thẻ bọc blur glass cho đồng hồ
                     const countdownContainer = document.querySelector('.countdown-container');
                     if (countdownContainer) {
@@ -183,6 +186,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.body.style.backgroundPosition = 'center';
                     document.body.style.backgroundColor = '#000';
                 }
+                
+                // Cập nhật vị trí mèo dựa theo theme mới
+                if (window.myCat) window.myCat.updatePositionMode();
                 
                 // Clear input
                 e.target.value = '';

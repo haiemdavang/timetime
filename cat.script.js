@@ -93,6 +93,8 @@ class Cat {
         this.idleTime      = 0;
         this.idleThreshold = 20000; // 20 giây không làm gì sẽ nói chuyện
 
+        this.isBottomMode = false;
+
         this.init();
     }
 
@@ -109,9 +111,25 @@ class Cat {
         this.container.appendChild(this.bubble);
 
         this.applyZone();
+        this.updatePositionMode();
         this.initIdleDetection();
         requestAnimationFrame(this.animate.bind(this));
         this.changeAction();
+    }
+
+    updatePositionMode() {
+        const themeValue = localStorage.getItem('themeValue');
+        const themeType = localStorage.getItem('themeType');
+        
+        // Mặc định đen hoặc themeType là 'bg' với giá trị #000000
+        this.isBottomMode = (themeValue === '#000000' || (!themeValue && themeType !== 'video'));
+        
+        if (this.isBottomMode) {
+            this.container.classList.add('bottom-mode');
+        } else {
+            this.container.classList.remove('bottom-mode');
+        }
+        this.resetPosInZone();
     }
 
     /* ─── Idle Detection ────────────────────────────────── */
@@ -157,6 +175,9 @@ class Cat {
     }
 
     getZoneBounds() {
+        if (this.isBottomMode) {
+            return { minX: 20, maxX: window.innerWidth - 110 };
+        }
         // bounds giờ tính theo độ rộng của .countdown-container
         if (this.countdown) {
             return { minX: -20, maxX: this.countdown.offsetWidth - 80 };
