@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', () => {
         if (alarmIndex !== -1) {
             triggerAlarm(window.activeAlarms[alarmIndex]);
             window.activeAlarms.splice(alarmIndex, 1);
+
+            if (window.saveAlarms) window.saveAlarms();
             if (window.renderTimeline) window.renderTimeline();
             return;
         }

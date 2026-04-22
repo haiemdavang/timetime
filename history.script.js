@@ -1,6 +1,13 @@
 // Quản lý dòng thời gian báo thức (1 cũ + 2 mới)
 window.pastAlarm = null;
-window.activeAlarms = []; // Danh sách các báo thức đang đợi
+
+// Initialize from localStorage
+const savedAlarms = localStorage.getItem('activeAlarms');
+window.activeAlarms = savedAlarms ? JSON.parse(savedAlarms) : []; 
+
+window.saveAlarms = function() {
+    localStorage.setItem('activeAlarms', JSON.stringify(window.activeAlarms));
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     window.renderTimeline();
@@ -48,8 +55,14 @@ window.removeAlarm = function(index, status) {
         window.pastAlarm = null;
     } else {
         // Tìm đúng index trong mảng active
-        const actualIndex = window.activeAlarms.indexOf(window.activeAlarms.slice(0, 2)[status === 'past' ? index - 1 : index]);
-        window.activeAlarms.splice(actualIndex, 1);
+        const upcomingAlarms = window.activeAlarms.slice(0, 2);
+        const itemToRemove = upcomingAlarms[index - (window.pastAlarm ? 1 : 0)];
+        const actualIndex = window.activeAlarms.indexOf(itemToRemove);
+        
+        if (actualIndex !== -1) {
+            window.activeAlarms.splice(actualIndex, 1);
+            window.saveAlarms();
+        }
     }
     window.renderTimeline();
 };

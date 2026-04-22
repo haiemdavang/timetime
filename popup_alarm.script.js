@@ -49,6 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Sắp xếp lại theo thời gian
             window.activeAlarms.sort((a, b) => a.time.localeCompare(b.time));
+
+            // Lưu vào localStorage
+            if (window.saveAlarms) window.saveAlarms();
             
             // Cập nhật giao diện timeline
             if (window.renderTimeline) window.renderTimeline();
