@@ -62,6 +62,28 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
+        // Toggle Weather Visibility
+        const toggleWeather = document.getElementById('toggle-weather');
+        const savedWeather = localStorage.getItem('showWeather');
+        
+        // Initial state
+        if (savedWeather !== null && toggleWeather) {
+            toggleWeather.checked = (savedWeather === 'true');
+            // Apply initial state via body class for easier management
+            if (savedWeather === 'false') document.body.classList.add('hide-weather');
+        }
+        
+        if (toggleWeather) {
+            toggleWeather.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    document.body.classList.remove('hide-weather');
+                } else {
+                    document.body.classList.add('hide-weather');
+                }
+                localStorage.setItem('showWeather', e.target.checked);
+            });
+        }
+
 
         if (toggleHistory && historyContainer) {
             toggleHistory.addEventListener('change', (e) => {

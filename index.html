@@ -12,6 +12,9 @@
     <link rel="stylesheet" href="popup_alarm.style.css">
     <link rel="stylesheet" href="history.style.css">
     <link rel="stylesheet" href="popup_setting.style.css">
+    <link rel="stylesheet" href="weather/popup_weather.style.css">
+    <link rel="stylesheet" href="weather/popup_detail.style.css">
+    <link rel="stylesheet" href="weather/popup_search.style.css">
 </head>
 
 <body>
@@ -23,48 +26,8 @@
             <div id="cat-container">
                 <div class="cat-sprite" id="cat-sprite"></div>
             </div>
-            <!-- Giờ -->
-            <div class="time-group">
-                <div class="digits">
-                    <div class="digit-container" id="hour-1">
-                        <div class="digit-strip"></div>
-                    </div>
-                    <div class="digit-container" id="hour-2">
-                        <div class="digit-strip"></div>
-                    </div>
-                </div>
-                <div class="label">Hours</div>
-            </div>
-
-            <div class="separator">:</div>
-
-            <!-- Phút -->
-            <div class="time-group">
-                <div class="digits">
-                    <div class="digit-container" id="min-1">
-                        <div class="digit-strip"></div>
-                    </div>
-                    <div class="digit-container" id="min-2">
-                        <div class="digit-strip"></div>
-                    </div>
-                </div>
-                <div class="label">Minutes</div>
-            </div>
-
-            <div class="separator">:</div>
-
-            <!-- Giây -->
-            <div class="time-group">
-                <div class="digits">
-                    <div class="digit-container" id="sec-1">
-                        <div class="digit-strip"></div>
-                    </div>
-                    <div class="digit-container" id="sec-2">
-                        <div class="digit-strip"></div>
-                    </div>
-                </div>
-                <div class="label">Seconds</div>
-            </div>
+            <!-- Clock Display Area (Templates will load here) -->
+            <div id="clock-display" style="display: contents;"></div>
         </div>
 
         <!-- History Alarms -->
@@ -143,6 +106,9 @@
     <script src="popup_alarm.script.js"></script>
     <script src="popup_setting.script.js"></script>
     <script src="script.js"></script>
+    <script src="weather/popup_weather.script.js"></script>
+    <script src="weather/popup_detail.script.js"></script>
+    <script src="weather/popup_search.script.js"></script>
 </body>
 
 </html>

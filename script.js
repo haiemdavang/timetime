@@ -1,27 +1,72 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const ids = ['hour-1', 'hour-2', 'min-1', 'min-2', 'sec-1', 'sec-2'];
+    const clockDisplay = document.getElementById('clock-display');
     const strips = {};
+    let currentTemplate = '';
 
     const alarmNotice = document.getElementById('alarm-notice');
     const noticeMsg = document.getElementById('notice-msg');
     const dismissBtn = document.getElementById('dismiss-alarm');
-
-    // Khởi tạo các dải số (0-9) cho mỗi vị trí
-    ids.forEach(id => {
-        const container = document.getElementById(id);
-        if (!container) return;
-        const strip = container.querySelector('.digit-strip');
-
-        for (let i = 0; i <= 9; i++) {
-            const div = document.createElement('div');
-            div.className = 'digit';
-            div.textContent = i;
-            strip.appendChild(div);
-        }
-        strips[id] = strip;
-    });
-
     const alarmAudio = document.getElementById('alarm-audio');
+
+    /**
+     * Khởi tạo các dải số (0-9) cho mỗi vị trí
+     */
+    function initStrips() {
+        const ids = ['hour-1', 'hour-2', 'min-1', 'min-2', 'sec-1', 'sec-2'];
+        ids.forEach(id => {
+            const container = document.getElementById(id);
+            if (!container) {
+                delete strips[id];
+                return;
+            }
+            const strip = container.querySelector('.digit-strip');
+            strip.innerHTML = ''; // Clear existing
+
+            for (let i = 0; i <= 9; i++) {
+                const div = document.createElement('div');
+                div.className = 'digit';
+                div.textContent = i;
+                strip.appendChild(div);
+            }
+            strips[id] = strip;
+        });
+        updateTime(); // Immediately update after init
+    }
+
+    /**
+     * Tải template HTML cho đồng hồ
+     */
+    async function loadClockTemplate(templateName) {
+        if (currentTemplate === templateName) return;
+        
+        try {
+            const res = await fetch(`hour.template.${templateName}.html`);
+            if (!res.ok) throw new Error('Template not found');
+            const html = await res.text();
+            
+            if (clockDisplay) {
+                clockDisplay.innerHTML = html;
+                currentTemplate = templateName;
+                initStrips();
+            }
+        } catch (err) {
+            console.error('Error loading template:', err);
+        }
+    }
+
+    /**
+     * Kiểm tra và chuyển đổi template theo kích thước màn hình
+     */
+    function checkResponsive() {
+        const w = window.innerWidth;
+        if (w > 1024) {
+            loadClockTemplate('full');
+        } else if (w > 600) {
+            loadClockTemplate('mid');
+        } else {
+            loadClockTemplate('min');
+        }
+    }
 
     if (dismissBtn) {
         dismissBtn.addEventListener('click', () => {
@@ -55,14 +100,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const timeNow = `${h}:${m}:${s}`;
 
         // 1. Kiểm tra báo thức người dùng đặt
-        const alarmIndex = window.activeAlarms.findIndex(a => a.time === timeNow);
-        if (alarmIndex !== -1) {
-            triggerAlarm(window.activeAlarms[alarmIndex]);
-            window.activeAlarms.splice(alarmIndex, 1);
+        if (window.activeAlarms) {
+            const alarmIndex = window.activeAlarms.findIndex(a => a.time === timeNow);
+            if (alarmIndex !== -1) {
+                triggerAlarm(window.activeAlarms[alarmIndex]);
+                window.activeAlarms.splice(alarmIndex, 1);
 
-            if (window.saveAlarms) window.saveAlarms();
-            if (window.renderTimeline) window.renderTimeline();
-            return;
+                if (window.saveAlarms) window.saveAlarms();
+                if (window.renderTimeline) window.renderTimeline();
+                return;
+            }
         }
 
         // 2. Kiểm tra báo thức mặc định 17h (Nghỉ làm)
@@ -78,7 +125,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let toastTimer = null;
 
     function triggerAlarm(alarm) {
-        // Hiển thị UI thông báo
         if (noticeMsg) noticeMsg.textContent = alarm.msg;
         if (alarmNotice) {
             alarmNotice.classList.add('active');
@@ -88,7 +134,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 alarmAudio.play().catch(e => console.log('Audio autoplay prevented by browser'));
             }
 
-            // Tự động ẩn sau 8 giây
             if (toastTimer) clearTimeout(toastTimer);
             toastTimer = setTimeout(() => {
                 alarmNotice.classList.remove('active');
@@ -99,10 +144,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 8000);
         }
 
-        // Cập nhật Timeline
         window.pastAlarm = { ...alarm };
 
-        // Thông báo hệ thống
         if (!document.hasFocus() && Notification.permission === 'granted') {
             new Notification('Báo thức!', { body: alarm.msg });
         }
@@ -111,7 +154,9 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateDigit(id, value) {
         const strip = strips[id];
         if (!strip) return;
-        const digitHeight = strip.children[0].offsetHeight;
+        const firstDigit = strip.children[0];
+        if (!firstDigit) return;
+        const digitHeight = firstDigit.offsetHeight;
         const offset = -(parseInt(value) * digitHeight);
         strip.style.transform = `translateY(${offset}px)`;
     }
@@ -129,13 +174,16 @@ document.addEventListener('DOMContentLoaded', () => {
         updateDigit('sec-1', s[0]);
         updateDigit('sec-2', s[1]);
 
-        // Kiểm tra báo thức mỗi giây
         checkAlarm(h, m, s);
     }
 
-    // Khởi động
-    updateTime();
+    // Khởi động responsive check
+    checkResponsive();
+    window.addEventListener('resize', checkResponsive);
+    
+    // Cập nhật thời gian mỗi giây
     setInterval(updateTime, 1000);
+
     // Chặn copy và chuột phải
     document.addEventListener('copy', (e) => e.preventDefault());
     document.addEventListener('contextmenu', (e) => e.preventDefault());
@@ -169,7 +217,6 @@ document.addEventListener('DOMContentLoaded', () => {
             translateY = e.clientY - startY;
             countdownContainer.style.transform = `translate(${translateX}px, ${translateY}px)`;
             
-            // Calculate current distance from 0,0
             lastDragDist = Math.sqrt(translateX * translateX + translateY * translateY);
         });
 
@@ -177,7 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isDragging) return;
             isDragging = false;
             
-            // Cat reacts to the maximum drag distance achieved
             if (window.myCat) {
                 window.myCat.reactToDrag(lastDragDist);
             }
@@ -204,6 +250,4 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isDragging) countdownContainer.style.cursor = 'default';
         });
     }
-
-    window.addEventListener('resize', updateTime);
 });

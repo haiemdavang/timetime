@@ -1,0 +1,186 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+/* ============================================
+   WEATHER POPUP — góc trái trên
+   Style nhất quán với .side-panel / .setting-modal
+   ============================================ */
+
+/* Logic ẩn thời tiết từ settings */
+body.hide-weather .weather-popup {
+    display: none !important;
+}
+
+.weather-popup {
+    position: fixed;
+    top: 25px;
+    left: 25px;
+    width: auto;
+    min-width: 220px;
+    height: 70px;
+    /* Default state: Reduced blur and faint background */
+    background: rgba(255, 255, 255, 0.01);
+    backdrop-filter: blur(5px) saturate(100%);
+    -webkit-backdrop-filter: blur(5px) saturate(100%);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    padding: 0 20px;
+    color: white;
+    font-family: 'Inter', sans-serif;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+    box-shadow: none;
+    z-index: 900;
+    cursor: pointer;
+    user-select: none;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    opacity: 0;
+    transform: translateX(-20px); /* Slide in from left */
+    pointer-events: none;
+}
+
+.weather-popup.loaded {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: all;
+}
+
+.weather-popup:hover {
+    /* Hover state: Full Glassmorphism */
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(25px) saturate(180%);
+    -webkit-backdrop-filter: blur(25px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    transform: scale(1.02);
+}
+
+
+/* Left side: Icon & Temp */
+.weather-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding-right: 15px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weather-icon {
+    width: 38px;
+    height: 38px;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+}
+
+.weather-temp {
+    font-size: 1.5rem;
+    font-weight: 500;
+    letter-spacing: -0.5px;
+}
+
+/* Right side: Location & Time */
+.weather-right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 2px;
+}
+
+.weather-location {
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.9;
+    cursor: pointer;
+    transition: text-decoration 0.2s;
+}
+
+.weather-location:hover {
+    text-decoration: underline;
+}
+
+.weather-time {
+    display: none;
+}
+
+/* Loading/Error */
+.weather-loading, .weather-error {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    width: 100%;
+}
+
+.weather-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.1);
+    border-top-color: white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ── Loading state ── */
+.weather-loading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.8rem;
+    opacity: 0.6;
+}
+
+.weather-spinner {
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255,255,255,0.2);
+    border-top-color: rgba(255,255,255,0.8);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    flex-shrink: 0;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── Error state ── */
+.weather-error {
+    font-size: 0.75rem;
+    opacity: 0.7;
+    text-align: center;
+    padding: 4px 0;
+    line-height: 1.4;
+}
+
+.weather-retry-btn {
+    margin-top: 8px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 7px;
+    border-radius: 10px;
+    font-size: 0.78rem;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.weather-retry-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* ── Updated time ── */
+.weather-updated {
+    margin-top: 10px;
+    font-size: 0.58rem;
+    opacity: 0.35;
+    text-align: right;
+}

@@ -133,18 +133,57 @@ body {
     }
 }
 
+/* Responsive Styles */
+@media (max-width: 1024px) {
+    :root {
+        --digit-height: 150px;
+    }
+    .digit-container {
+        width: 90px;
+    }
+    .countdown-container {
+        gap: 20px;
+        padding: 20px 35px;
+    }
+    .label {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+    }
+    .separator {
+        font-size: 4rem;
+    }
+    .digit {
+        font-size: 130px;
+    }
+}
+
 @media (max-width: 600px) {
     :root {
-        --digit-height: 80px;
+        --digit-height: 100px;
     }
-
     .digit-container {
-        width: 50px;
+        width: 60px;
+        border-radius: 8px;
     }
-
+    .countdown-container {
+        gap: 12px;
+        padding: 15px 25px;
+    }
+    .separator {
+        font-size: 3rem;
+    }
     .digit {
         font-size: 60px;
     }
+}
+
+/* Template Specific Tweaks */
+.time-group.min-view {
+    gap: 0;
+}
+
+.time-group.min-view .digits {
+    gap: 5px;
 }
 
 /* Alarm Notice (Professional Toast Version) */
