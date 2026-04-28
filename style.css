@@ -136,10 +136,10 @@ body {
 /* Responsive Styles */
 @media (max-width: 1024px) {
     :root {
-        --digit-height: 150px;
+        --digit-height: 160px;
     }
     .digit-container {
-        width: 90px;
+        width: 100px;
     }
     .countdown-container {
         gap: 20px;
@@ -153,7 +153,45 @@ body {
         font-size: 4rem;
     }
     .digit {
-        font-size: 130px;
+        font-size: 140px;
+    }
+
+    /* Mid Clock Layout Specifics */
+    .mid-clock-layout {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+    }
+    
+    .mid-main-sep {
+        font-size: 6rem;
+        margin-top: -30px;
+    }
+
+    .stacked-time-group {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .stacked-time-group .time-group {
+        gap: 0;
+    }
+
+    .stacked-time-group .digits {
+        height: 70px;
+    }
+
+    .stacked-time-group .digit-container {
+        width: 60px;
+        height: 70px;
+        border-radius: 8px;
+    }
+
+    .stacked-time-group .digit {
+        font-size: 60px;
+        height: 70px;
     }
 }
 

@@ -1,25 +1,42 @@
-<div class="time-group">
-    <div class="digits">
-        <div class="digit-container" id="hour-1">
-            <div class="digit-strip"></div>
-        </div>
-        <div class="digit-container" id="hour-2">
-            <div class="digit-strip"></div>
-        </div>
-    </div>
-    <div class="label">Hours</div>
-</div>
-
-<div class="separator">:</div>
-
-<div class="time-group">
-    <div class="digits">
-        <div class="digit-container" id="min-1">
-            <div class="digit-strip"></div>
-        </div>
-        <div class="digit-container" id="min-2">
-            <div class="digit-strip"></div>
+<div class="mid-clock-layout">
+    <!-- Cột trái: Giờ (1 phần to) -->
+    <div class="time-group hour-group-mid">
+        <div class="digits">
+            <div class="digit-container" id="hour-1">
+                <div class="digit-strip"></div>
+            </div>
+            <div class="digit-container" id="hour-2">
+                <div class="digit-strip"></div>
+            </div>
         </div>
     </div>
-    <div class="label">Minutes</div>
+
+    <div class="separator mid-main-sep">:</div>
+
+    <!-- Cột phải: Phút và Giây xếp chồng (0.5 / 0.5) -->
+    <div class="stacked-time-group">
+        <!-- Phút -->
+        <div class="time-group min-group-mid">
+            <div class="digits">
+                <div class="digit-container" id="min-1">
+                    <div class="digit-strip"></div>
+                </div>
+                <div class="digit-container" id="min-2">
+                    <div class="digit-strip"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Giây -->
+        <div class="time-group sec-group-mid">
+            <div class="digits">
+                <div class="digit-container" id="sec-1">
+                    <div class="digit-strip"></div>
+                </div>
+                <div class="digit-container" id="sec-2">
+                    <div class="digit-strip"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
